@@ -5,16 +5,24 @@ import { useState } from 'react';
 import Logo from '../assets/logo_primary.svg';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import auth from '@react-native-firebase/auth';
+import { Alert } from 'react-native';
 
 export function SignIn() {
 
-    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const { colors } = useTheme();
 
     function handleSingIn(){
-        console.log(name);
+
+        if (!email || !password) {
+            return Alert.alert('Entrar', 'Informe email e senha');
+        }
+
+
+        console.log(email);
         console.log(password);
     }
 
@@ -29,7 +37,7 @@ export function SignIn() {
                 mb={4}
                 placeholder="E-mail"
                 InputLeftElement={<Icon as={<Envelope color={colors.gray[300]} />} ml={4} />}
-                onChangeText={setName}
+                onChangeText={setEmail}
             />
             <Input
                 mb={8}
