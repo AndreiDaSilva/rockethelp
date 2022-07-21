@@ -10,20 +10,44 @@ import { Alert } from 'react-native';
 
 export function SignIn() {
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const { colors } = useTheme();
 
-    function handleSingIn(){
-
-        if (!email || !password) {
-            return Alert.alert('Entrar', 'Informe email e senha');
+    function handleSingIn() {
+        if (!email && !password) {
+            return Alert.alert('Entrar', 'Informe email e senha!')
+        } else if (!email) {
+            return Alert.alert('Entrar', 'Informe um email!')
+        } else if (!password) {
+            return Alert.alert('Entrar', 'Informe um senha!');
         }
 
+        setIsLoading(true);
 
-        console.log(email);
-        console.log(password);
+        auth()
+            .signInWithEmailAndPassword(email, password)
+            .catch((erro) => {
+                console.log(erro);
+                setIsLoading(false);
+
+                if (erro.code == 'auth/invalid-email') {
+                    return Alert.alert('Erro', 'E-mail inválido.')
+                }
+                if (erro.code == 'auth/user-not-found') {
+                    return Alert.alert('Erro', 'E-mail ou senha inválido.')
+                }
+                if (erro.code == 'auth/wrong-password') {
+                    return Alert.alert('Erro', 'E-mail ou senha inválido.')
+                }
+
+                return Alert.alert('Erro', "Não foi possível entrar")
+
+
+            });
     }
 
     return (
@@ -47,7 +71,12 @@ export function SignIn() {
                 onChangeText={setPassword}
             />
 
-            <Button title="Entrar" w="full" onPress={handleSingIn} />
+            <Button
+                title="Entrar"
+                w="full"
+                onPress={handleSingIn}
+                isLoading={isLoading}
+            />
 
         </VStack>
     );

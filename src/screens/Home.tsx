@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { Order, OrderProps } from '../components/Order';
 import { Button } from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import  auth  from '@react-native-firebase/auth';
+import { Alert } from 'react-native';
 
 export function Home() {
     const { colors } = useTheme();
@@ -30,6 +32,15 @@ export function Home() {
         navigation.navigate('details', {orderId})
     }
 
+    function handleLogout(){
+        auth()
+        .signOut()
+        .catch(erro => {
+            console.log(erro);
+            return Alert.alert('Sair', 'Não foi possível sair')
+        })
+    }
+
     return (
         <VStack flex={1} pb={6} bg="gray.700">
             <HStack
@@ -45,6 +56,7 @@ export function Home() {
 
                 <IconButton
                     icon={<SignOut size={26} color={colors.gray[300]} />}
+                    onPress={handleLogout}
                 />
 
             </HStack>
