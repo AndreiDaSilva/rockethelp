@@ -22,7 +22,7 @@ export function Header({ title, ...rest }: Props) {
             alignItems="center"
             bg="gray.600"
             pb={6}
-            pt={12}
+            pt={20}
             {...rest}
         >
             <IconButton
